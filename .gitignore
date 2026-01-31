@@ -1,0 +1,16 @@
+# Audio files (large, contain personal interview data)
+*.m4a
+*.mp3
+*.wav
+*.mp4
+
+# Python
+__pycache__/
+*.pyc
+transcribe.py
+
+# OS
+.DS_Store
+
+# Claude
+.claude/

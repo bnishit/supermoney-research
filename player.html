@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Super Money - User Research Interviews</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Circular', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #121212;
+      color: #fff;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+
+    header {
+      margin-bottom: 2rem;
+    }
+
+    h1 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+      letter-spacing: -0.02em;
+    }
+
+    .subtitle {
+      color: #a7a7a7;
+      font-size: 0.875rem;
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .tab {
+      padding: 0.75rem 1.5rem;
+      background: #282828;
+      border: none;
+      border-radius: 500px;
+      font-size: 0.875rem;
+      color: #fff;
+      cursor: pointer;
+      font-weight: 500;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    .tab:hover {
+      background: #3e3e3e;
+      transform: scale(1.02);
+    }
+
+    .tab.active {
+      background: #1db954;
+      color: #000;
+    }
+
+    /* Interview info */
+    .interview-info {
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .avatar {
+      width: 64px;
+      height: 64px;
+      background: linear-gradient(135deg, #1db954 0%, #1ed760 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #000;
+    }
+
+    .interview-details {
+      flex: 1;
+    }
+
+    .interviewee {
+      font-weight: 700;
+      font-size: 1.5rem;
+      letter-spacing: -0.02em;
+    }
+
+    .meta {
+      color: #a7a7a7;
+      font-size: 0.875rem;
+    }
+
+    /* Audio Player */
+    .player {
+      background: linear-gradient(180deg, #282828 0%, #181818 100%);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .player-controls {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .play-btn {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: #1db954;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: transform 0.1s, background 0.2s;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    }
+
+    .play-btn:hover {
+      background: #1ed760;
+      transform: scale(1.06);
+    }
+
+    .play-btn svg {
+      fill: #000;
+      width: 24px;
+      height: 24px;
+    }
+
+    .play-btn .pause-icon {
+      display: none;
+    }
+
+    .play-btn.playing .play-icon {
+      display: none;
+    }
+
+    .play-btn.playing .pause-icon {
+      display: block;
+    }
+
+    .progress-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 4px;
+      background: #4d4d4d;
+      border-radius: 2px;
+      cursor: pointer;
+      position: relative;
+      transition: height 0.1s;
+    }
+
+    .progress-bar:hover {
+      height: 6px;
+    }
+
+    .progress-bar:hover .progress-fill {
+      background: #1db954;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: #fff;
+      border-radius: 2px;
+      width: 0%;
+      transition: width 0.1s linear;
+    }
+
+    .time-display {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.6875rem;
+      color: #a7a7a7;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .player-bottom {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .speed-control {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .speed-label {
+      font-size: 0.75rem;
+      color: #a7a7a7;
+    }
+
+    .speed-select {
+      padding: 0.375rem 0.75rem;
+      font-size: 0.75rem;
+      border: 1px solid #4d4d4d;
+      border-radius: 500px;
+      background: transparent;
+      color: #fff;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    .speed-select:hover {
+      border-color: #fff;
+    }
+
+    .speed-select option {
+      background: #282828;
+      color: #fff;
+    }
+
+    /* Transcript */
+    .transcript-header {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      letter-spacing: -0.02em;
+    }
+
+    .transcript {
+      max-height: 55vh;
+      overflow-y: auto;
+      background: #181818;
+      border-radius: 12px;
+    }
+
+    .segment {
+      padding: 1rem 1.25rem;
+      cursor: pointer;
+      border-bottom: 1px solid #282828;
+      transition: background 0.15s;
+      display: flex;
+      gap: 1rem;
+    }
+
+    .segment:last-child {
+      border-bottom: none;
+    }
+
+    .segment:hover {
+      background: #282828;
+    }
+
+    .segment.active {
+      background: #1a1a1a;
+      border-left: 3px solid #1db954;
+      padding-left: calc(1.25rem - 3px);
+    }
+
+    .segment-left {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.25rem;
+      flex-shrink: 0;
+      width: 90px;
+    }
+
+    .segment-time {
+      font-size: 0.6875rem;
+      color: #6a6a6a;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .segment-speaker {
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.125rem 0.5rem;
+      border-radius: 500px;
+      white-space: nowrap;
+    }
+
+    .segment-speaker.interviewer {
+      background: #3e3e3e;
+      color: #b3b3b3;
+    }
+
+    .segment-speaker.interviewee {
+      background: rgba(29, 185, 84, 0.2);
+      color: #1db954;
+    }
+
+    .segment-text {
+      font-size: 0.9375rem;
+      color: #e0e0e0;
+      line-height: 1.5;
+    }
+
+    .segment.active .segment-text {
+      color: #fff;
+    }
+
+    /* Part selector for Sidh */
+    .part-selector {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .part-btn {
+      padding: 0.5rem 1rem;
+      font-size: 0.8125rem;
+      background: #282828;
+      border: none;
+      border-radius: 4px;
+      color: #b3b3b3;
+      cursor: pointer;
+      font-weight: 500;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .part-btn:hover {
+      background: #3e3e3e;
+      color: #fff;
+    }
+
+    .part-btn.active {
+      background: #1db954;
+      color: #000;
+    }
+
+    /* Loading state */
+    .loading {
+      text-align: center;
+      padding: 3rem;
+      color: #a7a7a7;
+    }
+
+    /* Scrollbar */
+    .transcript::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .transcript::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .transcript::-webkit-scrollbar-thumb {
+      background: #4d4d4d;
+      border-radius: 4px;
+    }
+
+    .transcript::-webkit-scrollbar-thumb:hover {
+      background: #6a6a6a;
+    }
+
+    /* Now playing indicator */
+    .now-playing {
+      display: none;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      color: #1db954;
+      font-weight: 500;
+    }
+
+    .now-playing.visible {
+      display: flex;
+    }
+
+    .equalizer {
+      display: flex;
+      align-items: flex-end;
+      gap: 2px;
+      height: 14px;
+    }
+
+    .equalizer span {
+      width: 3px;
+      background: #1db954;
+      border-radius: 1px;
+      animation: equalizer 0.5s ease-in-out infinite alternate;
+    }
+
+    .equalizer span:nth-child(1) { animation-delay: 0s; height: 6px; }
+    .equalizer span:nth-child(2) { animation-delay: 0.1s; height: 10px; }
+    .equalizer span:nth-child(3) { animation-delay: 0.2s; height: 4px; }
+    .equalizer span:nth-child(4) { animation-delay: 0.3s; height: 8px; }
+
+    @keyframes equalizer {
+      0% { transform: scaleY(0.3); }
+      100% { transform: scaleY(1); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Super Money User Research</h1>
+      <p class="subtitle">Interview Transcripts with Synced Audio</p>
+    </header>
+
+    <div class="tabs">
+      <button class="tab active" data-tab="sidh">Sidh</button>
+      <button class="tab" data-tab="nithya">Nithya</button>
+    </div>
+
+    <div id="interview-content">
+      <!-- Dynamic content loaded here -->
+    </div>
+  </div>
+
+  <script>
+    // Interview data configuration
+    const interviews = {
+      sidh: {
+        name: 'Sidh',
+        location: 'Bangalore',
+        parts: [
+          { label: 'Part 1', audio: 'Sidh 1 Blr.m4a', transcript: 'transcripts/sidh-1-timestamps.json' },
+          { label: 'Part 2', audio: 'Sidh 2 Blr.m4a', transcript: 'transcripts/sidh-2-timestamps.json' }
+        ]
+      },
+      nithya: {
+        name: 'Nithya',
+        location: 'Gurgaon',
+        parts: [
+          { label: 'Full Interview', audio: 'Nithya gurgaon.m4a', transcript: 'transcripts/nithya-timestamps.json' }
+        ]
+      }
+    };
+
+    let currentInterview = 'sidh';
+    let currentPart = 0;
+    let audio = null;
+    let segments = [];
+    let isPlaying = false;
+
+    // Format time as mm:ss
+    function formatTime(seconds) {
+      const mins = Math.floor(seconds / 60);
+      const secs = Math.floor(seconds % 60);
+      return `${mins}:${secs.toString().padStart(2, '0')}`;
+    }
+
+    // Load transcript JSON
+    async function loadTranscript(url) {
+      const response = await fetch(url);
+      const data = await response.json();
+      return data;
+    }
+
+    // Simple speaker detection heuristic
+    function detectSpeaker(text, prevSpeaker, intervieweeName) {
+      const isQuestion = /\?$/.test(text.trim());
+      const shortResponse = text.split(' ').length < 8;
+      const greetings = /^(hey|hi|hello|okay|alright|sure|yes|no|yeah|yep|nope|hmm|um|uh)/i.test(text.trim());
+
+      // Questions are typically from interviewer
+      if (isQuestion && text.length > 20) {
+        return 'interviewer';
+      }
+
+      // Very short responses could be either, use previous context
+      if (shortResponse && greetings) {
+        return prevSpeaker === 'interviewer' ? intervieweeName.toLowerCase() : 'interviewer';
+      }
+
+      // Longer responses are typically from interviewee
+      if (text.split(' ').length > 15) {
+        return intervieweeName.toLowerCase();
+      }
+
+      // Alternate as fallback
+      return prevSpeaker === 'interviewer' ? intervieweeName.toLowerCase() : 'interviewer';
+    }
+
+    // Render the interview player
+    async function renderInterview() {
+      const interview = interviews[currentInterview];
+      const part = interview.parts[currentPart];
+      const content = document.getElementById('interview-content');
+
+      content.innerHTML = '<div class="loading">Loading transcript...</div>';
+
+      try {
+        const data = await loadTranscript(part.transcript);
+        segments = data.segments;
+
+        // Detect speakers for each segment
+        let prevSpeaker = 'interviewer';
+        segments.forEach(seg => {
+          seg.speaker = detectSpeaker(seg.text, prevSpeaker, interview.name);
+          prevSpeaker = seg.speaker;
+        });
+
+        let partSelectorHtml = '';
+        if (interview.parts.length > 1) {
+          partSelectorHtml = `
+            <div class="part-selector">
+              ${interview.parts.map((p, i) => `
+                <button class="part-btn ${i === currentPart ? 'active' : ''}" data-part="${i}">${p.label}</button>
+              `).join('')}
+            </div>
+          `;
+        }
+
+        const segmentsHtml = segments.map((seg, i) => {
+          const speakerLabel = seg.speaker === 'interviewer' ? 'Interviewer' : interview.name;
+          const speakerClass = seg.speaker === 'interviewer' ? 'interviewer' : 'interviewee';
+          return `
+            <div class="segment" data-index="${i}" data-start="${seg.start}" data-end="${seg.end}">
+              <div class="segment-left">
+                <span class="segment-time">${formatTime(seg.start)}</span>
+                <span class="segment-speaker ${speakerClass}">${speakerLabel}</span>
+              </div>
+              <span class="segment-text">${seg.text}</span>
+            </div>
+          `;
+        }).join('');
+
+        content.innerHTML = `
+          <div class="interview-info">
+            <div class="avatar">${interview.name[0]}</div>
+            <div class="interview-details">
+              <div class="interviewee">${interview.name}</div>
+              <div class="meta">${interview.location} · ${formatTime(data.duration)}</div>
+            </div>
+          </div>
+
+          ${partSelectorHtml}
+
+          <div class="player">
+            <audio id="audio-player" src="${part.audio}"></audio>
+            <div class="player-controls">
+              <button class="play-btn" id="play-btn">
+                <svg class="play-icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                <svg class="pause-icon" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+              </button>
+              <div class="progress-container">
+                <div class="progress-bar" id="progress-bar">
+                  <div class="progress-fill" id="progress-fill"></div>
+                </div>
+                <div class="time-display">
+                  <span id="current-time">0:00</span>
+                  <span id="duration">${formatTime(data.duration)}</span>
+                </div>
+              </div>
+            </div>
+            <div class="player-bottom">
+              <div class="now-playing" id="now-playing">
+                <div class="equalizer">
+                  <span></span><span></span><span></span><span></span>
+                </div>
+                Now Playing
+              </div>
+              <div class="speed-control">
+                <span class="speed-label">Speed</span>
+                <select class="speed-select" id="speed-select">
+                  <option value="0.5">0.5x</option>
+                  <option value="0.75">0.75x</option>
+                  <option value="1" selected>1x</option>
+                  <option value="1.25">1.25x</option>
+                  <option value="1.5">1.5x</option>
+                  <option value="2">2x</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="transcript-header">Transcript</div>
+          <div class="transcript" id="transcript">
+            ${segmentsHtml}
+          </div>
+        `;
+
+        setupAudioPlayer();
+        setupTranscriptClicks();
+        setupPartSelector();
+
+      } catch (error) {
+        content.innerHTML = `<div class="loading">Error loading transcript: ${error.message}</div>`;
+      }
+    }
+
+    // Setup audio player controls
+    function setupAudioPlayer() {
+      audio = document.getElementById('audio-player');
+      const playBtn = document.getElementById('play-btn');
+      const progressBar = document.getElementById('progress-bar');
+      const progressFill = document.getElementById('progress-fill');
+      const currentTimeEl = document.getElementById('current-time');
+      const speedSelect = document.getElementById('speed-select');
+      const nowPlaying = document.getElementById('now-playing');
+
+      // Play/pause
+      playBtn.addEventListener('click', () => {
+        if (audio.paused) {
+          audio.play();
+        } else {
+          audio.pause();
+        }
+      });
+
+      audio.addEventListener('play', () => {
+        playBtn.classList.add('playing');
+        nowPlaying.classList.add('visible');
+        isPlaying = true;
+      });
+
+      audio.addEventListener('pause', () => {
+        playBtn.classList.remove('playing');
+        nowPlaying.classList.remove('visible');
+        isPlaying = false;
+      });
+
+      // Time update
+      audio.addEventListener('timeupdate', () => {
+        const progress = (audio.currentTime / audio.duration) * 100;
+        progressFill.style.width = `${progress}%`;
+        currentTimeEl.textContent = formatTime(audio.currentTime);
+        highlightCurrentSegment(audio.currentTime);
+      });
+
+      // Seek
+      progressBar.addEventListener('click', (e) => {
+        const rect = progressBar.getBoundingClientRect();
+        const percent = (e.clientX - rect.left) / rect.width;
+        audio.currentTime = percent * audio.duration;
+      });
+
+      // Speed control
+      speedSelect.addEventListener('change', (e) => {
+        audio.playbackRate = parseFloat(e.target.value);
+      });
+    }
+
+    // Highlight current segment
+    function highlightCurrentSegment(currentTime) {
+      const segmentEls = document.querySelectorAll('.segment');
+      let activeIndex = -1;
+
+      segments.forEach((seg, i) => {
+        if (currentTime >= seg.start && currentTime < seg.end) {
+          activeIndex = i;
+        }
+      });
+
+      segmentEls.forEach((el, i) => {
+        if (i === activeIndex) {
+          el.classList.add('active');
+          // Scroll into view if needed
+          const transcript = document.getElementById('transcript');
+          const elTop = el.offsetTop - transcript.offsetTop;
+          const elBottom = elTop + el.offsetHeight;
+          const scrollTop = transcript.scrollTop;
+          const viewHeight = transcript.clientHeight;
+
+          if (elTop < scrollTop || elBottom > scrollTop + viewHeight) {
+            transcript.scrollTo({
+              top: elTop - viewHeight / 3,
+              behavior: 'smooth'
+            });
+          }
+        } else {
+          el.classList.remove('active');
+        }
+      });
+    }
+
+    // Setup transcript segment clicks
+    function setupTranscriptClicks() {
+      document.querySelectorAll('.segment').forEach(el => {
+        el.addEventListener('click', () => {
+          const start = parseFloat(el.dataset.start);
+          audio.currentTime = start;
+          audio.play();
+        });
+      });
+    }
+
+    // Setup part selector (for Sidh)
+    function setupPartSelector() {
+      document.querySelectorAll('.part-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          currentPart = parseInt(btn.dataset.part);
+          renderInterview();
+        });
+      });
+    }
+
+    // Setup tab switching
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        currentInterview = tab.dataset.tab;
+        currentPart = 0;
+        renderInterview();
+      });
+    });
+
+    // Initial render
+    renderInterview();
+  </script>
+</body>
+</html>
